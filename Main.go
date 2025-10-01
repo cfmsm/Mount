@@ -8,15 +8,14 @@ import (
 )
 
 func main() {
-    fs := http.FileServer(http.Dir("./files"))
-    http.Handle("/", fs)
-
-    // Use Railway-assigned PORT
+    http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+        http.Redirect(w, r, "https://sites.google.com/view/aerospry/home", http.StatusFound)
+    })
     port := os.Getenv("PORT")
     if port == "" {
         port = "8080"
     }
 
-    fmt.Printf("Server starting on port %s, serving files from ./files...\n", port)
+    fmt.Printf("Server starting on port %s, redirecting all traffic...\n", port)
     log.Fatal(http.ListenAndServe(":"+port, nil))
 }
